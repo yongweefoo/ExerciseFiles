@@ -1,0 +1,19 @@
+# Connecting to Hive from R
+
+# Install R from https://cran.r-project.org
+
+# Get IP from VM
+$ ifconfig
+
+# Switch to R
+library(RJDBC)
+
+#Load Hive JDBC driver
+hivedrv <- JDBC("org.apache.hadoop.hive.jdbc.HiveDriver",
+                c(list.files("/home/amar/hadoop/hadoop",pattern="jar$",full.names=T),
+                  list.files("/home/amar/hadoop/hive/lib",pattern="jar$",full.names=T)))
+
+#Connect to Hive service
+hivecon <- dbConnect(hivedrv, "jdbc:hive://ip:port/default")
+query = "select * from mytable LIMIT 10"
+hres <- dbGetQuery(hivecon, query)
